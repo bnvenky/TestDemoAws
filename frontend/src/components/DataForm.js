@@ -65,7 +65,7 @@ const DataForm = ({ onDataSave }) => {
             {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
             
             <div>
-                <h2>Saved Data</h2>
+                <h2>View Data</h2>
                 <button onClick={fetchData}>View</button>
             </div>
             <ul>
