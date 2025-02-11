@@ -34,17 +34,25 @@ jobs:
       working-directory: ./backend
       run: |
         npm install
-        pm2 delete all || true
+        pm2 delete backend || true
         pm2 start app.js --name "backend"
         pm2 save
         
     - name: Install and Build Frontend
       working-directory: ./frontend
       run: |
+        rm -rf build
         npm install
         npm run build
         
     - name: Deploy Frontend Build
       run: |
-        sudo rm -rf /var/www/app/frontend/build
-        sudo cp -r frontend/build /var/www/app/frontend/
+        sudo rm -rf /var/www/app/TestDemoAws/frontend/build
+        sudo mkdir -p /var/www/app/TestDemoAws/frontend
+        sudo cp -r frontend/build /var/www/app/TestDemoAws/frontend/
+        sudo chown -R ubuntu:ubuntu /var/www/app
+        sudo chmod -R 755 /var/www/app
+        
+    - name: Restart Nginx
+      run: |
+        sudo systemctl restart nginx
