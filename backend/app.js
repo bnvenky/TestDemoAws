@@ -8,7 +8,11 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// ensure CORS is properly configured
+app.use(cors({
+    origin: '*',  // In production, change this to your specific domain
+    credentials: true
+}));
 app.use(express.json());
 
 connectDB();
