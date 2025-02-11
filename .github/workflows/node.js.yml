@@ -30,22 +30,21 @@ jobs:
         cd frontend
         echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > .env
     
-    - name: Install Backend Dependencies
+    - name: Install and Build Backend
       working-directory: ./backend
       run: |
         npm install
+        pm2 delete all || true
+        pm2 start app.js --name "backend"
+        pm2 save
         
-    - name: Install Frontend Dependencies and Build
+    - name: Install and Build Frontend
       working-directory: ./frontend
       run: |
         npm install
         npm run build
         
-    - name: Restart PM2 Processes
+    - name: Deploy Frontend Build
       run: |
-        pm2 restart all
-        pm2 save
-        
-    - name: Reload Nginx
-      run: |
-        sudo systemctl reload nginx
+        sudo rm -rf /var/www/app/frontend/build
+        sudo cp -r frontend/build /var/www/app/frontend/
